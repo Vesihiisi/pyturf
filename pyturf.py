@@ -17,20 +17,21 @@ def utc_to_local(string):
 def time_object_print(datetime):
     return datetime.strftime("%Y-%m-%d %H:%M:%S")
 
-
+def request_zone(name):
+    the_url="http://api.turfgame.com/v4/zones"
+    data = json.dumps([{"name" : name}])
+    r = requests.post(the_url, data)
+    print("zone: ", r.json()[0]["name"])
+    print("current owner: " + r.json()[0]["currentOwner"]["name"])
+    timestamp = utc_to_local(r.json()[0]["dateLastTaken"])
+    print("taken: " + time_object_print(timestamp))   
 
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('zonename')
     args = parser.parse_args()
     if args.zonename:
-        the_url="http://api.turfgame.com/v4/zones"
-        data = json.dumps([{"name" : args.zonename}])
-        r = requests.post(the_url, data)
-        print("zone: ", r.json()[0]["name"])
-        print("current owner: " + r.json()[0]["currentOwner"]["name"])
-        timestamp = utc_to_local(r.json()[0]["dateLastTaken"])
-        print("taken: " + time_object_print(timestamp))
+        request_zone(args.zonename)
 
 if __name__ == '__main__':
     main()
