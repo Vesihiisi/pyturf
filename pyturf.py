@@ -17,6 +17,12 @@ def utc_to_local(string):
 def time_object_print(datetime):
     return datetime.strftime("%Y-%m-%d %H:%M:%S")
 
+def request_blocktime(name):
+    the_url="http://api.turfgame.com/v4/users"
+    data  = json.dumps([{"name" : name}])
+    r = requests.post(the_url, data)
+    return int(r.json()[0]["blocktime"])
+
 def request_zone(name):
     the_url="http://api.turfgame.com/v4/zones"
     data = json.dumps([{"name" : name}])
